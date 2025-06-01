@@ -1,0 +1,32 @@
+{
+  "name": "DoorUnlocker",
+  "version": "1.0.0",
+  "description": "for delivery service for japan",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node --loader ts-node/esm src/app/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MinnieMinwoo/DoorUnlocker.git"
+  },
+  "author": "MinnieMinwoo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MinnieMinwoo/DoorUnlocker/issues"
+  },
+  "homepage": "https://github.com/MinnieMinwoo/DoorUnlocker#readme",
+  "devDependencies": {
+    "@types/express": "^5.0.2",
+    "@types/react-dom": "^19.1.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  }
+}
