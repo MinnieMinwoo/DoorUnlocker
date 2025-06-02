@@ -1,6 +1,6 @@
-import { apiURL } from "entities/switchbot/config/backend";
+import { apiURL } from "../config/backend";
 import crypto from "crypto";
-import { SceneResponse } from "entities/switchbot/model/sceneResponse";
+import { SceneResponse } from "../model/sceneResponse";
 
 const getScenes = async (): Promise<any> => {
   const token = process.env.SWITCHBOT_API_TOKEN;
