@@ -1,5 +1,4 @@
 import { unlock } from "@/features/switchbot";
-import { redirect } from "next/dist/server/api-utils";
 
 export async function POST(request: Request) {
   try {

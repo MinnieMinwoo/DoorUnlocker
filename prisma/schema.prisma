@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model DeliveryPackage {
+  id                    Int       @id @default(autoincrement())
+  trackingNumber        String    @unique
+  deliveryCompany       String 
+  estimatedDeliveryDate DateTime
+
+  loginAttempts LoginAttempt[]
+  unlockEvents  UnlockEvent[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model LoginAttempt {
+  id        Int      @id @default(autoincrement())
+  timestamp DateTime @default(now())
+  success   Boolean
+  ipAddress String
+  os        String
+  webBrowser String
+
+  packageTrackingNumber String
+  deliveryPackage     DeliveryPackage @relation(fields: [packageTrackingNumber], references: [trackingNumber])
+
+  createdAt DateTime @default(now())
+}
+
+model UnlockEvent {
+  id        Int      @id @default(autoincrement())
+  timestamp DateTime @default(now())
+  ipAddress String
+  os        String
+  webBrowser String
+
+  packageTrackingNumber String
+  deliveryPackage     DeliveryPackage @relation(fields: [packageTrackingNumber], references: [trackingNumber])
+
+  createdAt DateTime @default(now())
+}
