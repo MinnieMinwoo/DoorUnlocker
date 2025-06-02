@@ -1,12 +1,11 @@
-import { getScenes } from "@/entities/switchbot";
+import { unlock } from "@/features/switchbot";
+import { redirect } from "next/dist/server/api-utils";
 
 export async function POST(request: Request) {
   try {
-    const result = await getScenes();
-    console.log(result);
-    return new Response("オートロック解除しました", {
-      status: 200,
-    });
+    await unlock();
+
+    return Response.redirect("/?success=true", 302);
   } catch (error) {
     console.error("Error unlocking:", error);
   }

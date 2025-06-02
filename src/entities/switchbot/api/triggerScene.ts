@@ -1,12 +1,13 @@
 import { apiURL } from "../config/backend";
-import { SceneResponse } from "../model/sceneResponse";
 import getHeaderData from "../lib/getHeaderData";
 
-const getScenes = async () => {
+const triggerScene = async (sceneId: string) => {
   const { token, sign, nonce, time } = getHeaderData();
 
-  const response = await fetch(`${apiURL}/scenes`, {
-    method: "GET",
+  console.log("Triggering scene with ID:", sceneId);
+
+  const response = await fetch(`${apiURL}/scenes/${sceneId}/execute`, {
+    method: "POST",
     headers: {
       Authorization: token,
       sign,
@@ -17,11 +18,12 @@ const getScenes = async () => {
   });
 
   if (!response.ok) {
+    const result = await response.json();
     throw new Error(`Error fetching scenes: ${response.statusText}`);
   }
 
-  const result: SceneResponse = await response.json();
-  return result.body;
+  const result = await response.json();
+  return result;
 };
 
-export default getScenes;
+export default triggerScene;
