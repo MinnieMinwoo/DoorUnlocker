@@ -1,11 +1,14 @@
 {
-  "name": "DoorUnlocker",
+  "name": "door-unlocker",
   "version": "1.0.0",
   "description": "for delivery service for japan",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "node --loader ts-node/esm src/app/index.ts"
+    "dev": "npm run build:server && npm run build:client && node build_server/app/index.js",
+    "start": "npm run build:server && npm run build:client && node build_server/app/index.js",
+    "build:client": "webpack",
+    "build:server": "tsc"
   },
   "repository": {
     "type": "git",
@@ -18,10 +21,21 @@
   },
   "homepage": "https://github.com/MinnieMinwoo/DoorUnlocker#readme",
   "devDependencies": {
+    "@babel/core": "^7.27.4",
+    "@babel/preset-env": "^7.27.2",
+    "@babel/preset-react": "^7.27.1",
+    "@babel/preset-typescript": "^7.27.1",
     "@types/express": "^5.0.2",
+    "@types/react": "^19.1.6",
     "@types/react-dom": "^19.1.5",
+    "babel-loader": "^10.0.0",
+    "html-webpack-plugin": "^5.6.3",
+    "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "webpack": "^5.99.9",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.1"
   },
   "dependencies": {
     "dotenv": "^16.5.0",
