@@ -1,7 +1,9 @@
 import React from "react";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { Timer } from "@/components/timer.tsx";
+import { Timer } from "@/components/timer";
+import { UnlockButton } from "@/components/unlockbutton";
+import { DeliveryCompany } from "@/components/deliveryCompany";
 
 export default async function Admin() {
   const cookieStore = await cookies();
@@ -24,14 +26,17 @@ export default async function Admin() {
     <>
       <h1>自動オートロック解除システム</h1>
       <Timer loginTime={loginTime} />
-      <form action="/api/signin" method="POST">
+      <form action="/api/track" method="POST">
         <label>宅配追跡番号または指定した番号:</label>
         <input type="text" name="trackingCode" required minLength={8} />
-        <button type="submit">宅配番号の登録</button>
+        <DeliveryCompany />
+        <label style={{ marginLeft: 8 }}>予想到着日:</label>
+        <input type="date" name="estimatedDeliveryDate" required style={{ marginLeft: 8 }} min="2025-06-05" />
+        <button type="submit" style={{ marginLeft: 8 }}>
+          宅配番号の登録
+        </button>
       </form>
-      <form>
-        <button type="submit">オートロック解除</button>
-      </form>
+      <UnlockButton />
     </>
   );
 }
