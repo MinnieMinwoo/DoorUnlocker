@@ -14,6 +14,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Master {
+  id        Int      @id @default(autoincrement())
+  sessionId String   @unique
+  loginTime DateTime @default(now())
+}
+
 model DeliveryPackage {
   id                    Int       @id @default(autoincrement())
   trackingNumber        String    @unique

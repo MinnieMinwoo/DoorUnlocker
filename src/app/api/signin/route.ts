@@ -1,8 +1,23 @@
+import { setMasterUser } from "@/entities/masterUser";
+import { cookies } from "next/headers";
+
 export async function POST(request: Request) {
   try {
     const trackingCode = (await request.formData()).get("trackingCode");
 
     if (trackingCode === process.env.ADMIN_SECRET) {
+      const { sessionId } = await setMasterUser();
+
+      const cookie = await cookies();
+      cookie.set("sessionId", sessionId, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        expires: new Date(Date.now() + 60 * 60 * 1000),
+        maxAge: 60 * 60,
+      });
+
       const redirectUrl = new URL("/admin", request.url);
       return Response.redirect(redirectUrl.toString(), 302);
     }
