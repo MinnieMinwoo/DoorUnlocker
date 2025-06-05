@@ -1,3 +1,4 @@
+import { DeliveryCompany } from "@/components/deliveryCompany";
 import React from "react";
 
 const Main = () => {
@@ -9,8 +10,12 @@ const Main = () => {
       <p>セキュリティのため、数回入力に失敗したらログインはできませんので、ご了承ください。</p>
       <form action="/api/signin" method="POST">
         <label>宅配追跡番号または指定した番号:</label>
-        <input type="text" name="trackingCode" required />
-        <button type="submit">オートロック解除</button>
+        <input type="text" name="trackingCode" required minLength={8} />
+        <DeliveryCompany />
+        <label style={{ marginLeft: 8 }}>予想到着日:</label>
+        <button type="submit" style={{ marginLeft: 8 }}>
+          宅配番号の登録
+        </button>
       </form>
     </>
   );

@@ -18,6 +18,10 @@ model Master {
   id        Int      @id @default(autoincrement())
   sessionId String   @unique
   loginTime DateTime @default(now())
+
+  ipAddress String
+  os        String
+  userAgent String
 }
 
 model DeliveryPackage {
@@ -39,10 +43,11 @@ model LoginAttempt {
   success   Boolean
   ipAddress String
   os        String
-  webBrowser String
+  userAgent String
 
   packageTrackingNumber String
   deliveryPackage     DeliveryPackage @relation(fields: [packageTrackingNumber], references: [trackingNumber])
+  sessionId String?
 
   createdAt DateTime @default(now())
 }
@@ -52,7 +57,7 @@ model UnlockEvent {
   timestamp DateTime @default(now())
   ipAddress String
   os        String
-  webBrowser String
+  userAgent String
 
   packageTrackingNumber String
   deliveryPackage     DeliveryPackage @relation(fields: [packageTrackingNumber], references: [trackingNumber])
