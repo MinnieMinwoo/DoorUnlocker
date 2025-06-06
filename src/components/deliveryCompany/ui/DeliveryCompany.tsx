@@ -26,6 +26,7 @@ export default function DeliveryCompany() {
           name="deliveryCompanyOther"
           id="other-company-input"
           placeholder="配達業者名を入力"
+          required
           style={{ marginLeft: 8 }}
         />
       )}

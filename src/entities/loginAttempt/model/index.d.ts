@@ -6,6 +6,6 @@ export type LoginAttempt = {
   os: string;
   userAgent: string;
   packageTrackingNumber: string;
-  sessionId?: string | null;
+  sessionId: string;
   createdAt: Date;
 };

@@ -1,5 +1,5 @@
-import Main from "@/components/main/ui/Main";
+import { Auth } from "@/components/auth";
 
 export default function Home() {
-  return <Main />;
+  return <Auth />;
 }

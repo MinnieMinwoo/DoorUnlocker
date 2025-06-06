@@ -1,6 +1,6 @@
-import { getDeliveryCode } from "@/entities/deliveryCode";
 import { setLoginAttempt } from "@/entities/loginAttempt";
 import { setMasterUser } from "@/entities/masterUser";
+import { guestLoginValidation } from "@/features/auth";
 import { getUserInfo } from "@/shared";
 import { cookies } from "next/headers";
 
@@ -9,15 +9,21 @@ export async function POST(request: Request) {
   if (!ip || !userAgent || !os) return new Response("Bad Request", { status: 400 });
 
   const formData = await request.formData();
-  const trackingCode = formData.get("trackingCode");
-  const deliveryCompany = formData.get("deliveryCompany");
+  const trackingCode = formData.get("trackingCode") as string;
+  const deliveryCompany =
+    formData.get("deliveryCompany") === "その他"
+      ? (formData.get("deliveryCompanyOther") as string)
+      : (formData.get("deliveryCompany") as string);
+
+  console.log("Tracking Code:", trackingCode);
+  console.log("Delivery Company:", deliveryCompany);
   if (typeof trackingCode !== "string" || trackingCode.length < 8 || typeof deliveryCompany !== "string") {
-    await setLoginAttempt(trackingCode as string, ip, os, userAgent, false);
+    await setLoginAttempt(trackingCode ?? "", deliveryCompany ?? "", ip, os, userAgent, false);
     return new Response("Invalid tracking code", { status: 400 });
   }
 
   try {
-    if (trackingCode === process.env.ADMIN_SECRET) {
+    if (deliveryCompany === process.env.ADMIN_KEY && trackingCode === process.env.ADMIN_SECRET) {
       const { sessionId } = await setMasterUser(ip, os, userAgent);
 
       const cookie = await cookies();
@@ -34,23 +40,14 @@ export async function POST(request: Request) {
       return Response.redirect(redirectUrl.toString(), 302);
     }
 
-    const result = await getDeliveryCode(trackingCode, deliveryCompany);
+    const { result, status } = await guestLoginValidation(trackingCode, deliveryCompany);
     if (!result) {
-      await setLoginAttempt(trackingCode as string, ip, os, userAgent, false);
-      const redirectUrl = new URL("/?error=404", request.url);
+      await setLoginAttempt(trackingCode, deliveryCompany, ip, os, userAgent, false);
+      const redirectUrl = new URL(`/?error=${status}`, request.url);
       return Response.redirect(redirectUrl.toString(), 302);
     }
 
-    const { estimatedDeliveryDate } = result;
-    if (!estimatedDeliveryDate) {
-      await setLoginAttempt(trackingCode as string, ip, os, userAgent, false);
-      const redirectUrl = new URL("/?error=401", request.url);
-      return Response.redirect(redirectUrl.toString(), 302);
-    }
-
-    //todo: check login count
-
-    const { sessionId } = await setLoginAttempt(trackingCode, ip, os, userAgent, true);
+    const { sessionId } = await setLoginAttempt(trackingCode, deliveryCompany, ip, os, userAgent, true);
     const codeCookie = await cookies();
     codeCookie.set("sessionId", sessionId, {
       httpOnly: true,
@@ -60,8 +57,8 @@ export async function POST(request: Request) {
       expires: new Date(Date.now() + 60 * 5 * 1000),
       maxAge: 60 * 5,
     });
-    const url = new URL(request.url);
-    const redirectUrl = new URL("/?success=true", url.origin);
+
+    const redirectUrl = new URL("/main", request.url);
     return Response.redirect(redirectUrl.toString(), 302);
   } catch (error) {
     console.error("Error in signin API:", error);

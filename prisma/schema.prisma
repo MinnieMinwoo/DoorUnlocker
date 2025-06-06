@@ -30,11 +30,7 @@ model DeliveryPackage {
   deliveryCompany       String 
   estimatedDeliveryDate DateTime
 
-  loginAttempts LoginAttempt[]
-  unlockEvents  UnlockEvent[]
-
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model LoginAttempt {
@@ -46,9 +42,8 @@ model LoginAttempt {
   userAgent String
 
   packageTrackingNumber String
-  deliveryPackage     DeliveryPackage @relation(fields: [packageTrackingNumber], references: [trackingNumber])
+  deliveryCompany       String 
   sessionId String?
-
   createdAt DateTime @default(now())
 }
 
@@ -60,7 +55,6 @@ model UnlockEvent {
   userAgent String
 
   packageTrackingNumber String
-  deliveryPackage     DeliveryPackage @relation(fields: [packageTrackingNumber], references: [trackingNumber])
 
   createdAt DateTime @default(now())
 }
