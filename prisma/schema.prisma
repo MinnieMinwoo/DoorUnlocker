@@ -55,6 +55,8 @@ model UnlockEvent {
   userAgent String
 
   packageTrackingNumber String
+  deliveryCompany       String 
+  sessionId String?
 
   createdAt DateTime @default(now())
 }

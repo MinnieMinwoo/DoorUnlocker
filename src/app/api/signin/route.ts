@@ -48,6 +48,8 @@ export async function POST(request: Request) {
     }
 
     const { sessionId } = await setLoginAttempt(trackingCode, deliveryCompany, ip, os, userAgent, true);
+    if (!sessionId) throw new Error("Session ID not found after login attempt");
+
     const codeCookie = await cookies();
     codeCookie.set("sessionId", sessionId, {
       httpOnly: true,

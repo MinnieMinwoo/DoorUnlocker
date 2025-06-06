@@ -1,5 +1,5 @@
 "use server";
-import { DeliveryPackage } from "@/generated/prisma";
+import { DeliveryPackage } from "../model/type";
 import { prisma } from "@/shared";
 
 const getDeliveryCode = async (deliveryCode: string, deliveryCompany: string): Promise<DeliveryPackage | null> => {

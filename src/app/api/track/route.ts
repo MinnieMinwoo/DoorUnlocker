@@ -3,8 +3,12 @@ import { setDeliveryCode } from "@/entities/deliveryCode";
 export async function POST(request: Request) {
   const formData = await request.formData();
   const trackingCode = formData.get("trackingCode");
-  const deliveryCompany = formData.get("deliveryCompany") ? formData.get("deliveryCompanyOther") : "";
+  const deliveryCompany =
+    formData.get("deliveryCompany") === "その他"
+      ? formData.get("deliveryCompanyOther")
+      : formData.get("deliveryCompany");
   const estimatedDeliveryDate = formData.get("estimatedDeliveryDate"); // YYYY-MM-DD
+
   if (
     typeof trackingCode !== "string" ||
     trackingCode.length < 8 ||
@@ -15,8 +19,7 @@ export async function POST(request: Request) {
 
   try {
     const dateObj = new Date(estimatedDeliveryDate);
-    const response = await setDeliveryCode(trackingCode, deliveryCompany, dateObj);
-    console.log("Master user validation result:", response);
+    await setDeliveryCode(trackingCode, deliveryCompany, dateObj);
     const redirectUrl = new URL("/admin?success=true", request.url);
     return Response.redirect(redirectUrl.toString(), 302);
   } catch (error) {

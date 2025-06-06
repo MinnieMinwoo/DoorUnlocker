@@ -4,5 +4,4 @@ export type DeliveryPackage = {
   deliveryCompany: string;
   estimatedDeliveryDate: Date;
   createdAt: Date;
-  updatedAt: Date;
 };

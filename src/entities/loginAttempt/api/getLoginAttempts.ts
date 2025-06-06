@@ -2,7 +2,7 @@
 import { prisma } from "@/shared";
 import { LoginAttempt } from "../model";
 
-const getLoginAttempt = async (trackingNumber: string, success = true): Promise<LoginAttempt[]> => {
+const getLoginAttempts = async (trackingNumber: string, success = true): Promise<LoginAttempt[]> => {
   const result = await prisma.loginAttempt.findMany({
     where: {
       packageTrackingNumber: trackingNumber,
@@ -12,4 +12,4 @@ const getLoginAttempt = async (trackingNumber: string, success = true): Promise<
   return result as LoginAttempt[];
 };
 
-export default getLoginAttempt;
+export default getLoginAttempts;

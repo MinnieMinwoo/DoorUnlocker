@@ -18,14 +18,12 @@ export default async function Admin() {
   });
   if (!response.ok) redirect("/?error=unauthorized");
 
-  const {
-    user: { loginTime },
-  } = await response.json();
+  const { expiresAt } = await response.json();
 
   return (
     <>
       <h1>自動オートロック解除システム</h1>
-      <Timer loginTime={loginTime} />
+      <Timer expireTime={expiresAt} />
       <form action="/api/track" method="POST">
         <label>宅配追跡番号または指定した番号:</label>
         <input type="text" name="trackingCode" required minLength={8} />

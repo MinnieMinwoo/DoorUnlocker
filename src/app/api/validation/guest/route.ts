@@ -1,4 +1,4 @@
-import { getMasterUser } from "@/entities/masterUser";
+import { getLoginAttemptBySession } from "@/entities/loginAttempt";
 import { cookies } from "next/headers";
 
 export async function GET() {
@@ -7,14 +7,14 @@ export async function GET() {
     const sessionId = cookie.get("sessionId")?.value;
     if (!sessionId) return new Response("Unauthorized", { status: 401 });
 
-    const masterUser = await getMasterUser(sessionId);
-    if (!masterUser) return new Response("Unauthorized", { status: 401 });
+    const guestUser = await getLoginAttemptBySession(sessionId);
+    if (!guestUser) return new Response("Unauthorized", { status: 401 });
 
     const currentTime = new Date();
-    const timeDifference = currentTime.getTime() - masterUser.loginTime?.getTime();
-    if (timeDifference > 60 * 60 * 1000) return new Response("Unauthorized", { status: 401 });
+    const timeDifference = currentTime.getTime() - guestUser.timestamp?.getTime();
+    if (timeDifference > 60 * 5 * 1000) return new Response("Unauthorized", { status: 401 });
 
-    const expiresAt = new Date(masterUser.loginTime?.getTime() + 5 * 60 * 1000);
+    const expiresAt = new Date(guestUser.timestamp.getTime() + 5 * 60 * 1000);
 
     return new Response(
       JSON.stringify({

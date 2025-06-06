@@ -1,16 +1,15 @@
 "use client";
 import React, { useEffect, useState } from "react";
 
-export default function Timer({ loginTime }: { loginTime: string }) {
+export default function Timer({ expireTime }: { expireTime: string }) {
   const [remainText, setRemainText] = useState("0分 0秒");
 
   useEffect(() => {
-    if (!loginTime) {
+    if (!expireTime) {
       setRemainText("0分 0秒");
       return;
     }
-    const loginDate = new Date(loginTime);
-    const expireDate = new Date(loginDate.getTime() + 60 * 60 * 1000);
+    const expireDate = new Date(expireTime);
 
     const updateRemain = () => {
       const now = new Date();
@@ -26,7 +25,7 @@ export default function Timer({ loginTime }: { loginTime: string }) {
     updateRemain();
     const timer = setInterval(updateRemain, 1000);
     return () => clearInterval(timer);
-  }, [loginTime]);
+  }, [expireTime]);
 
   return <span>{remainText}</span>;
 }

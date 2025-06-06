@@ -1,7 +1,6 @@
-export type LoginAttempt = {
+export type UnlockEvent = {
   id: number;
   timestamp: Date;
-  success: boolean;
   ipAddress: string;
   os: string;
   userAgent: string;
