@@ -18,7 +18,6 @@ const triggerScene = async (sceneId: string) => {
   });
 
   if (!response.ok) {
-    const result = await response.json();
     throw new Error(`Error fetching scenes: ${response.statusText}`);
   }
 

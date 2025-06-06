@@ -14,7 +14,7 @@ export async function GET() {
     const timeDifference = currentTime.getTime() - masterUser.loginTime?.getTime();
     if (timeDifference > 60 * 60 * 1000) return new Response("Unauthorized", { status: 401 });
 
-    const expiresAt = new Date(masterUser.loginTime?.getTime() + 5 * 60 * 1000);
+    const expiresAt = new Date(masterUser.loginTime?.getTime() + 60 * 60 * 1000);
 
     return new Response(
       JSON.stringify({
